@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>preload</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        #imgBox {
+            width: 800px;
+            height: 500px;
+            border: 1px solid #ff1545;
+            position: relative;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+        }
+        .imgBox-btn {
+            display: inline-block;
+            width: 150px;
+            height: 20px;
+            color: #2b333b;
+            text-decoration: none;
+            margin: 5px 10px;
+        }
+        .imgBox-btn:hover {
+            background: #ccc;
+        }
+        .btn {
+            text-align: center;
+        }
+        .masking {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: #ccc;
+            z-index: 999;
+        }
+        .progress {
+            text-align: center;
+            position: relative;
+            top: 50%;
+            margin-top: -20px;
+            font-size: 40px;
+        }
+        .imgBox img {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<!--<script type="text/javascript" src="jquery-3.3.1.js"></script>-->
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<body>
+<div id="imgBox" class="imgBox">
+    <img class="imgBox_img"  alt="img">
+</div>
+<div class="btn">
+    <a class="imgBox-btn imgBox-btn-prev" href="javaScript:;" data-control="prev">上一页</a>
+    <a class="imgBox-btn imgBox-btn-next" href="javaScript:;" data-control="next">下一页</a>
+</div>
+<div class="masking ">
+    <p class="progress">0%</p>
+</div>
+</body>
+<script type="text/javascript" src="preload.js"></script>
+<!--<script type="text/javascript" src="myPlug.js"></script>-->
+<script type="text/javascript">
+    $(function () {
+        imgs = [
+            "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1517055832113&di=74f8043567b5e18ed53d819a7cbfe938&imgtype=0&src=http%3A%2F%2Fimg001.hc360.cn%2Fg7%2FM07%2FFA%2FBD%2FwKhQtFQejOCERZquAAAAAAF-LZQ730.jpg",
+            "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1517055832113&di=9c7caace47bed766514a2c731133ea83&imgtype=0&src=http%3A%2F%2Fimg1.3lian.com%2F2015%2Fa2%2F217%2Fd%2F49.jpg",
+            "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1517055942091&di=133749863fb8a9c51d41bcc8628d767d&imgtype=0&src=http%3A%2F%2Fimg.tuku.cn%2Ffile_big%2F201503%2Fc066e56887e24a759688b38595b91f12.jpg",
+            "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1517055942091&di=d9bd66bd6d437b764dbcc7e3f94025e4&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F018450554927970000019ae9014736.jpg",
+            "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1517055986031&di=ef66c3e5f8b949488928aecd3bd3557c&imgtype=jpg&src=http%3A%2F%2Fimg2.imgtn.bdimg.com%2Fit%2Fu%3D3549178387%2C1196379203%26fm%3D214%26gp%3D0.jpg",
+            "img/0%20006.JPG",
+        ];
+        $('.imgBox_img').attr('src',imgs[0])
+        var len = imgs.length,
+            index = 0,
+            $progress = $('.progress');
+        $.Preload(imgs,{
+            each:function (count){$progress.html(Math.round((count + 1) / len * 100) + "%");},
+            all:function (){$('.masking').hide();document.title = '1/'+len;}
+        });
+        $('.imgBox-btn').on('click', function () {
+            if ('prev' === $(this).data('control')) {
+                index = Math.max(0, --index);
+            } else {
+                index = Math.min(len - 1, ++index);
+            }
+            document.title = index + "/" + (len - 1).toString();
+            $('.imgBox_img').attr('src',imgs[index]);
+        });
+    })
+</script>
+</html>
